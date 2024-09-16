@@ -1,0 +1,12 @@
+{% extends 'index.html' %}
+{% block content %}
+<h2>Modifier mon compte</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Modifier</button>
+    <a href="{{ request.META.HTTP_REFERER }}">Annuler</a>
+</form>
+<a href="{% url 'supprimer_mon_compte' %}" class="btn btn-danger mt-3"
+   onclick="return confirm('Voulez-vous vraiment supprimer votre compte ?')">Supprimer mon compte</a>
+{% endblock %}

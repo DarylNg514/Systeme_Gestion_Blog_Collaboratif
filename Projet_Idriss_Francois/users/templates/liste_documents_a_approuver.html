@@ -1,0 +1,25 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-primary">Documents Académiques en Attente d'Approbation</h2>
+    <ul class="list-group mt-4">
+        {% for document in documents %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>Utilisateur : {{ document.utilisateur.username }}</span>
+            <form method="post" action="{% url 'approuver_document_academique' document.id %}" class="d-flex">
+                {% csrf_token %}
+                <button type="submit" name="action" value="approuver" class="btn btn-success btn-sm me-2">
+                    Approuver
+                </button>
+                <button type="submit" name="action" value="rejeter" class="btn btn-danger btn-sm">
+                    Rejeter
+                </button>
+            </form>
+        </li>
+        {% empty %}
+        <p class="text-warning">Aucun document académique en attente d'approbation.</p>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

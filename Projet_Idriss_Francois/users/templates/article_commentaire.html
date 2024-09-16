@@ -1,0 +1,104 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}
+
+<link href="{% static 'css/detail.css' %}" rel="stylesheet" />
+<div class="container mt-5">
+    <!-- Titre de l'article -->
+    <div class="mb-4">
+        <h2 class="text-primary mb-4">Titre de l'Article : {{ article.titre }}</h2>
+        <p class="lead"><strong>Contenu :</strong></p>
+        <p class="p-3 bg-light border rounded">{{ article.contenu }}</p>
+    </div>
+
+    <!-- Boutons de modification et suppression de l'article pour auteur ou admin -->
+    {% if user == article.auteur or user.role == 'admin' %}
+    <div class="mb-4 d-flex">
+        <a href="{% url 'modifier_article' article.id %}" class="btn-custom btn-modifier me-2 d-flex align-items-center">
+            <i class="fas fa-edit me-1"></i> Modifier l'article
+        </a>
+        <a href="{% url 'supprimer_article' article.id %}" class="btn-custom btn-supprimer d-flex align-items-center" 
+           onclick="return confirm('Voulez-vous vraiment supprimer cet article ?')">
+            <i class="fas fa-trash-alt me-1"></i> Supprimer l'article
+        </a>
+        <!-- Boutons de publication/dépublication pour les éditeurs ou auteurs -->
+    {% if user.role == 'editeur' or user == article.auteur %}
+    <div class="mb-4 d-flex">
+        <!-- Afficher le bouton "Publier" si l'article n'est pas encore publié -->
+        {% if not article.est_publie %}
+        <a href="{% url 'publier_article' article.id %}" class="btn-custom btn-success me-2 d-flex align-items-center">
+            <i class="fas fa-upload me-1"></i> Publier l'article
+        </a>
+        {% else %}
+        <!-- Afficher le bouton "Retirer de la publication" si l'article est déjà publié -->
+        <a href="{% url 'depublier_article' article.id %}" class="btn-custom btn-warning d-flex align-items-center">
+            <i class="fas fa-times me-1"></i> Retirer la publication
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+
+    </div>
+    {% endif %}
+
+    <!-- Section des commentaires -->
+    <div class="card mb-5 shadow-sm">
+        <div class="card-header bg-info text-white border border-info">
+            <h3 class="mb-0">Commentaires :</h3>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for commentaire in commentaires %}
+            <li class="list-group-item">
+                <p><strong>{{ commentaire.utilisateur.username }} :</strong> {{ commentaire.contenu }} 
+                   <small class="text-muted"> 
+                   (Posté le {{ commentaire.cree_le|date:"d M, Y à H:i" }})</small>
+                </p>
+
+                <!-- Boutons de modification et suppression de commentaire pour l'auteur du commentaire -->
+                {% if commentaire.utilisateur == user %}
+                <div class="mt-2 d-flex">
+                    <!--
+                        <a href="{% url 'modifier_commentaire' commentaire.id %}" class="btn-custom btn-modifier me-2">
+                        <i class="fas fa-edit me-1"></i> Modifier
+                    </a>              
+                        -->
+                    <a href="{% url 'supprimer_commentaire' commentaire.id %}" class="btn-custom btn-supprimer"
+                       onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?')">
+                        <i class="fas fa-trash-alt me-1"></i> Supprimer
+                    </a>
+                </div>
+                {% endif %}
+            </li>
+            {% empty %}
+            <li class="list-group-item">Aucun commentaire pour cet article.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+<hr><br>
+
+    <!-- Formulaire pour ajouter un commentaire -->
+    <div class="card mb-5 shadow-sm">
+        <div class="card-header bg-success text-white border border-success">
+            <h4 class="mb-0">Ajouter un commentaire :</h4>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.as_p }}
+                </div>
+                <button type="submit" class="btn-custom btn-ajouter mt-2">
+                    <i class="fas fa-plus"></i> Ajouter
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bouton de retour -->
+    <a href="{% url 'dashboard' %}" class="btn-custom btn-retour">
+        <i class="fas fa-arrow-left me-1"></i> Retour
+    </a>
+</div>
+{% endblock %}

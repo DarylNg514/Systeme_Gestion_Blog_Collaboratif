@@ -1,0 +1,53 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}
+
+<br>
+<h2 class="text-primary text-center">Liste des utilisateurs</h2>
+<br>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Image</th> <!-- Colonne pour l'image -->
+            <th>Nom d'utilisateur</th>
+            <th>Email</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Sexe</th>
+            <th>Rôle</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for utilisateur in utilisateurs %}
+        <tr>
+            <!-- Affichage de l'image de l'utilisateur -->
+            <td>
+                {% if utilisateur.image %}
+                    <img src="{{ utilisateur.image.url }}" alt="Image de {{ utilisateur.username }}" class="img-thumbnail" width="50" height="50">
+                {% else %}
+                    <img src="{% static 'images/default-avatar.png' %}" alt="Pas d'image" class="img-thumbnail" width="50" height="50">
+                {% endif %}
+            </td>
+            <!-- Affichage des informations supplémentaires -->
+            <td>{{ utilisateur.username }}</td>
+            <td>{{ utilisateur.email }}</td>
+            <td>{{ utilisateur.first_name }}</td>
+            <td>{{ utilisateur.last_name }}</td>
+            <td>{{ utilisateur.sex }}</td>
+            <td>{{ utilisateur.role }}</td>
+            <td>
+                <a href="{% url 'modifier_utilisateur' utilisateur.id %}" class="btn btn-warning">Modifier</a>
+                <a href="{% url 'supprimer_utilisateur' utilisateur.id %}" class="btn btn-danger"
+                   onclick="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?')">Supprimer</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8">Aucun utilisateur trouvé.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'ajouter_utilisateur' %}" class="btn btn-success mb-3">
+    <i class="fas fa-plus"></i> Ajouter un utilisateur
+</a>
+{% endblock %}

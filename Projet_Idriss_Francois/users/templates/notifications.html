@@ -1,0 +1,30 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-primary">Vos notifications</h2>
+    <ul class="list-group mt-4">
+        {% for notification in notifications %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>{{ notification.message }} - {{ notification.date_creation }}</span>
+            <div>
+                {% if not notification.est_lu %}
+                <a href="{% url 'marquer_comme_lu' notification.id %}" class="btn btn-outline-info btn-sm me-2">
+                    Voir
+                </a>
+                {% else %}
+                <span class="text-muted">(Déjà lue)</span>
+                {% endif %}
+                <a href="{% url 'supprimer_notification' notification.id %}" class="btn btn-outline-danger btn-sm">
+                    Supprimer
+                </a>
+            </div>
+        </li>
+        {% empty %}
+        <li class="list-group-item">Pas de nouvelles notifications</li>
+        {% endfor %}
+    </ul>
+    {% if notifications %}
+    <a href="{% url 'supprimer_toutes_les_notifications' %}" class="btn btn-danger mt-3">Supprimer toutes les notifications</a>
+    {% endif %}
+</div>
+{% endblock %}

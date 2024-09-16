@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/soumission.css' %}">    
+    <title>Soumettre document</title>
+</head>
+<body>
+    <h2>Soumettre document</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Soumettre</button>
+    </form>
+</body>
+</html>

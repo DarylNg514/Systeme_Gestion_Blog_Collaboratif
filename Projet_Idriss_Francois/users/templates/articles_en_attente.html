@@ -1,0 +1,16 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Articles en attente de validation</h2>
+    <ul class="list-group mt-3">
+        {% for article in articles %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><strong>{{ article.titre }}</strong> - {{ article.auteur.username }}</span>
+            <a href="{% url 'valider_article' article.id %}" class="btn btn-primary">Voir et valider ou rejeter</a>
+        </li>
+        {% empty %}
+        <li class="list-group-item">Aucun article en attente de validation.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Validation de l'article : {{ article.titre }}</h2>
+    <p><strong>Auteur :</strong> {{ article.auteur.username }}</p>
+    <p><strong>Contenu :</strong> {{ article.contenu }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Bouton pour valider l'article -->
+        <button type="submit" name="valider" class="btn btn-success">Valider</button>
+
+        <!-- Bouton pour rejeter l'article -->
+        <button type="submit" name="rejeter" class="btn btn-danger">Rejeter</button>
+
+        <!-- Champ pour ajouter un commentaire en cas de rejet -->
+        <div class="form-group mt-3">
+            <label for="commentaire">Commentaire (en cas de rejet) :</label>
+            <textarea id="commentaire" name="commentaire" class="form-control" rows="4"></textarea>
+        </div>
+    </form>
+</div>
+{% endblock %}

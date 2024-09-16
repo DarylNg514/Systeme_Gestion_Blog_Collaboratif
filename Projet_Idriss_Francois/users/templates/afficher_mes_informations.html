@@ -1,0 +1,39 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Mes informations personnelles</h2>
+
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            Informations de {{ utilisateur.username }}
+        </div>
+        <div class="card-body">
+            <p><strong>Nom d'utilisateur :</strong> {{ utilisateur.username }}</p>
+            <p><strong>Email :</strong> {{ utilisateur.email }}</p>
+            <p><strong>Prénom :</strong> {{ utilisateur.first_name }}</p>
+            <p><strong>Nom :</strong> {{ utilisateur.last_name }}</p>
+            <p><strong>Rôle :</strong> {{ utilisateur.get_role_display }}</p>
+            <p><strong>Sexe :</strong> {{ utilisateur.get_sex_display }}</p>
+
+            <!-- Image si l'utilisateur en a une -->
+            {% if utilisateur.image %}
+            <p><strong>Photo de profil :</strong></p>
+            <img src="{{ utilisateur.image.url }}" alt="Photo de {{ utilisateur.username }}" class="img-thumbnail" width="150">
+            {% else %}
+            <p><strong>Photo de profil :</strong> Aucune photo</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <a href="{% url 'modifier_mon_compte' %}" class="btn btn-warning">
+        <i class="fas fa-edit"></i> Modifier mes informations
+    </a>
+    <a href="{% url 'supprimer_mon_compte' %}" class="btn btn-danger mt-3"
+   onclick="return confirm('Voulez-vous vraiment supprimer votre compte ?')">Supprimer mon compte</a>
+
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Retour au tableau de bord
+    </a>
+</div>
+{% endblock %}

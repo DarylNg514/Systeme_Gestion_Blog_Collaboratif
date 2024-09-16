@@ -1,0 +1,12 @@
+<h2>Changer le rôle de {{ utilisateur.username }}</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label for="role">Nouveau rôle :</label>
+    <select name="role" id="role">
+        <option value="etudiant">Étudiant</option>
+        <option value="auteur_certifie">Auteur Certifié</option>
+        <option value="editeur">Éditeur</option>
+        <option value="admin">Administrateur</option>
+    </select>
+    <button type="submit">Modifier</button>
+</form>

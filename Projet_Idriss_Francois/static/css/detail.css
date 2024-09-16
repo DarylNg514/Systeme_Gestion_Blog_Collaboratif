@@ -1,0 +1,80 @@
+.btn-custom {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Style pour le bouton Modifier */
+.btn-modifier {
+    background-color: #f0ad4e;
+    color: white;
+    border: 2px solid #e3a01c;
+}
+
+.btn-modifier:hover {
+    background-color: #e3a01c;
+    border-color: #c88718;
+}
+
+/* Style pour le bouton Supprimer */
+.btn-supprimer {
+    background-color: #d9534f;
+    color: white;
+    border: 2px solid #d43f3a;
+}
+
+.btn-supprimer:hover {
+    background-color: #d43f3a;
+    border-color: #b52d2a;
+}
+
+/* Style pour le bouton Ajouter */
+.btn-ajouter {
+    background-color: #5cb85c;
+    color: white;
+    border: 2px solid #4cae4c;
+}
+
+.btn-ajouter:hover {
+    background-color: #4cae4c;
+    border-color: #398439;
+}
+
+/* Style pour le bouton Retour */
+.btn-retour {
+    background-color: #6c757d;
+    color: white;
+    border: 2px solid #5a6268;
+}
+
+.btn-retour:hover {
+    background-color: #5a6268;
+    border-color: #4e555b;
+}
+
+/* Styles supplémentaires pour améliorer l'apparence globale */
+h2 {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.card-header {
+    font-size: 20px;
+    padding: 15px;
+}
+
+.card-body {
+    font-size: 16px;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}

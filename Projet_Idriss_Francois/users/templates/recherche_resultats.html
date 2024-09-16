@@ -1,0 +1,16 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-primary">Résultats de la Recherche</h2>
+    <ul class="list-group mt-4">
+        {% for article in articles %}
+        <li class="list-group-item">
+            <a href="{% url 'detail_article' article.pk %}" class="text-decoration-none text-dark">
+                {{ article.titre }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
