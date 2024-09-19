@@ -5,17 +5,25 @@
     <h2 class="text-primary">Certifications en Attente d'Approbation</h2>
     <ul class="list-group mt-4">
         {% for certification in certifications %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span>Utilisateur : {{ certification.utilisateur.username }}</span>
-            <form method="post" action="{% url 'approuver_certification' certification.id %}" class="d-flex">
-                {% csrf_token %}
-                <button type="submit" name="action" value="approuver" class="btn btn-success btn-sm me-2">
-                    Approuver
-                </button>
-                <button type="submit" name="action" value="rejeter" class="btn btn-danger btn-sm">
-                    Rejeter
-                </button>
-            </form>
+        <li class="list-group-item d-flex flex-column">
+            <div>
+                <strong>Utilisateur :</strong> {{ certification.utilisateur.username }} <br>
+                <strong>Email :</strong> {{ certification.utilisateur.email }} <br>
+                <strong>Rôle :</strong> {{ certification.utilisateur.get_role_display }} <br>
+                <strong>Sexe :</strong> {{ certification.utilisateur.get_sex_display }} <br>
+                <strong>Certification :</strong> <a href="{{ certification.document.url }}" target="_blank">Voir le certificat</a> <br>
+            </div>
+            <div class="d-flex mt-2">
+                <form method="post" action="{% url 'approuver_certification' certification.id %}" class="d-flex">
+                    {% csrf_token %}
+                    <button type="submit" name="action" value="approuver" class="btn btn-success btn-sm me-2">
+                        Approuver
+                    </button>
+                    <button type="submit" name="action" value="rejeter" class="btn btn-danger btn-sm">
+                        Rejeter
+                    </button>
+                </form>
+            </div>
         </li>
         {% empty %}
         <p class="text-warning">Aucune certification en attente d'approbation.</p>

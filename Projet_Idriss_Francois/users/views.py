@@ -601,11 +601,9 @@ def modifier_utilisateur(request, utilisateur_id):
 def supprimer_utilisateur(request, utilisateur_id):
     utilisateur = get_object_or_404(Utilisateur, id=utilisateur_id)
     if request.user.role == 'admin':
-        if request.method == 'POST':
-            utilisateur.delete()
-            messages.success(request, "Utilisateur supprimé avec succès.")
-            return redirect('liste_utilisateurs')
-        return render(request, 'supprimer_utilisateur.html', {'utilisateur': utilisateur})
+        utilisateur.delete()
+        messages.success(request, "Utilisateur supprimé avec succès.")
+        return redirect('liste_utilisateurs')
     else:
         return redirect('permission_refusee')  # Redirige si l'utilisateur n'est pas un administrateur
 

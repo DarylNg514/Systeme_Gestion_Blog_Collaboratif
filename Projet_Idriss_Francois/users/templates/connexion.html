@@ -42,6 +42,7 @@
       </div> <br>
 
       <div class="links"> <a href="#">Pas encore inscrit?</a> <a href="{% url 'inscription' %}">S'inscrire</a> 
+        <a href="{{ request.META.HTTP_REFERER }}">Annuler</a>
 
       </div> <br>
 

@@ -34,11 +34,13 @@
 
       </div> <br>
       <div class="links"> <a href="#">Deja inscrit?</a> <a href="{% url 'connexion' %}">Se connecter</a> 
+        <a href="{{ request.META.HTTP_REFERER }}">Annuler</a>
 
       </div> <br>
       <div class="inputBox"> 
 
        <input type="submit" value="S'inscrire"> 
+       
 
       </div> 
     </form>
