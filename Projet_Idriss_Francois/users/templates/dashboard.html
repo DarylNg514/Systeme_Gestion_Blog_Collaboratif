@@ -68,7 +68,11 @@
                                     {% endif %}
                                 </span>
                         </div>
+                        {% if article.auteur.image %}
                             <img class="w-6 h-6 ml-auto rounded-full" src="{{ article.auteur.image.url }}" alt="{{ article.auteur.username }}"/>
+                            {% else %}
+                                <img src="{% static 'images/default-avatar.png' %}" alt="Pas d'image" class="img-thumbnail w-6 h-6 ml-auto rounded-full">
+                            {% endif %}
                         </div>
                     </div>
                 </a>
