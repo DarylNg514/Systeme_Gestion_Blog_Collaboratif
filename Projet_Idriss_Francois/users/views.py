@@ -644,215 +644,26 @@ def supprimer_mon_compte(request):
     return render(request, 'supprimer_mon_compte.html', {'utilisateur': utilisateur})
 
 
-
-
-
-'''
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from .forms import UserRegistrationForm, ArticleForm, CommentForm, CertificationForm
-from .models import Article, Comment, Certification, ArticleReview, Notification
-
-
-
-
-@login_required
-def changer_role(request, utilisateur_id):
-    if request.user.role == 'admin':
-        utilisateur = get_object_or_404(Utilisateur, id=utilisateur_id)
-        if request.method == 'POST':
-            nouveau_role = request.POST.get('role')
-            utilisateur.role = nouveau_role
-            utilisateur.save()
-            return redirect('gerer_utilisateurs')  # Redirige vers la liste des utilisateurs après modification
-        return render(request, 'changer_role.html', {'utilisateur': utilisateur})
-    else:
-        return redirect('permission_refusee')
-    
-
-
-
-
-@login_required
-def editer_article(request, pk):
-    article = get_object_or_404(Article, pk=pk, auteur=request.user)
-    if request.method == 'POST':
-        form = FormulaireArticle(request.POST, instance=article)
-        if form.is_valid():
-            form.save()
-            return redirect('gerer_articles')
-    else:
-        form = FormulaireArticle(instance=article)
-    return render(request, 'editer_article.html', {'form': form})
-
-# Vue pour l'inscription des utilisateurs
-def register(request):
-    if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            if user.is_author:
-                messages.info(request, "Vous devez soumettre vos certifications.")
-            login(request, user)
-            return redirect('home')
-    else:
-        form = UserRegistrationForm()
-    return render(request, 'registration/register.html', {'form': form})
-
-# Vue pour soumettre un document de certification
-@login_required
-def submit_certification(request):
-    if request.method == 'POST':
-        form = CertificationForm(request.POST, request.FILES)
-        if form.is_valid():
-            certification = form.save(commit=False)
-            certification.user = request.user
-            certification.save()
-            messages.success(request, "Document soumis pour validation.")
-            return redirect('dashboard')
-    else:
-        form = CertificationForm()
-    return render(request, 'certifications/submit.html', {'form': form})
-
-# Vue pour créer un article
-@login_required
-def create_article(request):
-    if request.method == 'POST':
-        form = ArticleForm(request.POST)
-        if form.is_valid():
-            article = form.save(commit=False)
-            article.author = request.user
-            article.save()
-            messages.success(request, "Article créé avec succès.")
-            return redirect('article_detail', pk=article.pk)
-    else:
-        form = ArticleForm()
-    return render(request, 'articles/create_article.html', {'form': form})
-
-# Vue pour soumettre un article étudiant pour révision
-@login_required
-def submit_student_article(request):
-    if request.method == 'POST':
-        form = ArticleForm(request.POST)
-        if form.is_valid():
-            article = form.save(commit=False)
-            article.author = request.user
-            article.save()
-            messages.success(request, "Article soumis pour révision.")
-            return redirect('article_list')
-    else:
-        form = ArticleForm()
-    return render(request, 'articles/submit_student_article.html', {'form': form})
-
-# Vue pour la revue et la validation des articles par le comité éditorial
-@login_required
-def review_article(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    if request.method == 'POST':
-        comments = request.POST.get('comments')
-        is_approved = 'approve' in request.POST
-        review = ArticleReview.objects.create(article=article, reviewer=request.user, comments=comments, is_approved=is_approved)
-        if is_approved:
-            article.is_published = True
-            article.save()
-            messages.success(request, "L'article a été approuvé et publié.")
-        else:
-            messages.warning(request, "L'article a été rejeté.")
-        return redirect('article_list')
-    return render(request, 'articles/review_article.html', {'article': article})
-
-# Vue pour l'ajout de commentaires
-@login_required
-def add_comment(request, article_id):
-    article = get_object_or_404(Article, id=article_id)
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.article = article
-            comment.user = request.user
-            comment.save()
-            messages.success(request, "Commentaire ajouté.")
-            return redirect('article_detail', pk=article.pk)
-    else:
-        form = CommentForm()
-    return render(request, 'comments/add_comment.html', {'form': form})
-    
-def articles_par_categorie(request, categorie_id):
-    categorie = get_object_or_404(Categorie, id=categorie_id)
-    articles = categorie.articles.filter(est_publie=True)
-    return render(request, 'articles/articles_par_categorie.html', {'categorie': categorie, 'articles': articles})
-
-def articles_par_tag(request, tag_id):
-    tag = get_object_or_404(Tag, id=tag_id)
-    articles = tag.articles.filter(est_publie=True)
-    return render(request, 'articles/articles_par_tag.html', {'tag': tag, 'articles': articles})
-
-
-@login_required
-def soumettre_article(request):
-    if request.method == 'POST':
-        form = FormulaireArticle(request.POST)
-        if form.is_valid():
-            article = form.save(commit=False)
-            article.auteur = request.user
-            article.save()
-            form.save_m2m()  # Pour enregistrer les relations ManyToMany
-            return redirect('gerer_articles')
-    else:
-        form = FormulaireArticle()
-    return render(request, 'articles/soumettre_article.html', {'form': form})
-
-@login_required
-def editer_article(request, pk):
-    article = get_object_or_404(Article, pk=pk, auteur=request.user)
-    if request.method == 'POST':
-        form = FormulaireArticle(request.POST, instance=article)
-        if form.is_valid():
-            form.save()
-            return redirect('gerer_articles')
-    else:
-        form = FormulaireArticle(instance=article)
-    return render(request, 'articles/editer_article.html', {'form': form})
-
-
-@login_required
-def recherche_avancee(request):
+def recherche_articles(request):
     query = request.GET.get('q')
-    articles = Article.objects.filter(titre__icontains=query) | Article.objects.filter(contenu__icontains=query)
-    return render(request, 'recherche/recherche_resultats.html', {'articles': articles})
-    
-@login_required
-def valider_article(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    if request.method == 'POST':
-        est_approuve = 'approuver' in request.POST
-        revue = RevueArticle.objects.create(article=article, validateur=request.user, est_approuve=est_approuve, commentaires=request.POST['commentaires'])
-        article.statut_validation = 'approuve' if est_approuve else 'rejete'
-        article.est_publie = est_approuve
-        article.save()
-        Notification.objects.create(destinataire=article.auteur, message=f"Votre article a été {'approuvé' if est_approuve else 'rejeté'}")
-        return redirect('tableau_de_bord')
-    return render(request, 'articles/valider_article.html', {'article': article})
+    if query:
+        # Recherche dans les titres et contenus d'articles
+        articles = Article.objects.filter(
+            Q(titre__icontains=query) | Q(contenu__icontains=query)
+        )
+        
+        # Recherche de catégories correspondantes
+        categories = Categorie.objects.filter(nom__icontains=query)
+        
+        # Si une catégorie est trouvée, ajouter les articles de cette catégorie aux résultats
+        if categories.exists():
+            for categorie in categories:
+                articles_categorie = categorie.articles.all()
+                articles = articles | articles_categorie  # Ajouter les articles de la catégorie aux résultats
+        
+        return render(request, 'recherche.html', {'articles': articles, 'query': query})
+    else:
+        return render(request, 'recherche.html', {'articles': None, 'query': query})
 
-
-@login_required
-def ajouter_commentaire(request, article_id):
-    article = get_object_or_404(Article, id=article_id)
-    if request.method == 'POST':
-        contenu = request.POST['contenu']
-        Commentaire.objects.create(article=article, utilisateur=request.user, contenu=contenu)
-        return redirect('detail_article', pk=article.pk)
-    return render(request, 'commentaires/ajouter_commentaire.html', {'article': article})
-
-@login_required
-def moderer_commentaires(request):
-    if request.user.role != 'admin' and request.user.role != 'editeur':
-        return redirect('accueil')
-    commentaires = Commentaire.objects.filter(est_modere=False)
-    return render(request, 'admin/moderer_commentaires.html', {'commentaires': commentaires})
-
-
-'''
+def chatbot_view(request):
+    return render(request, 'chatbot.html')

@@ -74,6 +74,8 @@ urlpatterns = [
     path('mon_compte/informations/', views.afficher_mes_informations, name='afficher_mes_informations'),
     path('mon_compte/modifier/', views.modifier_mon_compte, name='modifier_mon_compte'),
     path('mon_compte/supprimer/', views.supprimer_mon_compte, name='supprimer_mon_compte'),
+    path('recherche/', views.recherche_articles, name='recherche_articles'),
+    path('chatbot/', views.chatbot_view, name='chatbot'),
 ]
 if settings.DEBUG:  # Ajoutez cette condition pour les fichiers médias en mode développement
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
