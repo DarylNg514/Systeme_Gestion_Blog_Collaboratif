@@ -1,1 +1,1 @@
-web: gunicorn Projet_Idriss_Francois.Projet_Idriss_Francois.wsgi --log-file -
+web: gunicorn Projet_Idriss_Francois.wsgi --log-file -
