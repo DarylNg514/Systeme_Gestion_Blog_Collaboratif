@@ -1,0 +1,1 @@
+web: gunicorn Projet_Idriss_Francois.wsgi

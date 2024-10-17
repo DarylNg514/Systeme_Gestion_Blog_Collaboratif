@@ -30,11 +30,13 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '.ngrok-free.app',
-    '232f-64-187-189-218.ngrok-free.app',  # Add your Ngrok URL here
+    '08ff-142-126-12-98.ngrok-free.app',  # Add your Ngrok URL here
 ]
+ALLOWED_HOSTS = ['*']
+
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://232f-64-187-189-218.ngrok-free.app',  # Add your Ngrok URL here
+    'https://08ff-142-126-12-98.ngrok-free.app',  # Add your Ngrok URL here
 ]
 
 
@@ -148,3 +150,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
